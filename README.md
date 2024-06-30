@@ -53,12 +53,12 @@ This project uses IoT and machine learning to monitor and improve posture throug
     - `task 2.2.txt`: Task 2.2 instructions.
     - `task1 LED.txt`: Task 1 instructions for LED control.
     - `task6.1.txt`: Task 6.1 instructions.
-- **ExplanationVideo.mp4**: Video explanation of the project (Note: Removed due to large file size).
+- **ExplanationVideo.mp4**: [Video explanation of the project](ExplanationVideo.mp4)
 - **MyModel.py**: Python script for the main machine learning model.
-- **Posture Promo.mp4**: Promotional video for the posture monitoring system.
+- **Posture Promo.mp4**: [Promotional video for the posture monitoring system](Posture Promo.mp4)
 - **Posture.py**: Python script for posture-related functions.
-- **Presentation.pptx**: Project presentation slides.
-- **Schematic Diagram.drawio.pdf**: Schematic diagram of the system.
+- **Presentation.pptx**: [Project presentation slides](Presentation.pptx)
+- **Schematic Diagram.drawio.pdf**: [Schematic diagram of the system](Schematic Diagram.drawio.pdf)
 - **altrasonictest.py**: Script for testing ultrasonic sensor.
 - **buzzer.py**: Script for controlling a buzzer.
 - **flex_sensor_data.txt**: Data from the flex sensor.
