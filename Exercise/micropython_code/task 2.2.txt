@@ -1,0 +1,44 @@
+from machine import Pin, ADC
+from time import sleep
+
+# Initialize the analog pin for the light sensor
+analogPin = ADC(Pin(26))
+
+# Initialize the RGB LED pins
+ledG = Pin(25, Pin.OUT)
+ledR = Pin(15, Pin.OUT)
+ledB = Pin(16, Pin.OUT)
+
+# Threshold value for detecting touch
+threshold = 12000  # Adjust this value based on your sensor's output when touched
+
+print("start")
+
+while True:
+    analogVal16 = analogPin.read_u16()
+    #print(analogVal16)
+    
+    if analogVal16 < threshold:
+        print("RED")
+        ledG.off()
+        ledR.on()
+        ledB.off()
+    else:
+        print("BLINKING")
+        ledG.on()
+        ledR.off()
+        ledB.off()
+        sleep(0.25)
+        
+        ledG.off()
+        ledR.on()
+        ledB.off()
+        sleep(0.25)
+        
+        ledG.off()
+        ledR.off()
+        ledB.on()
+        sleep(0.25)
+        
+    sleep(1)
+

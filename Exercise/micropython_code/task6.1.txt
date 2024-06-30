@@ -1,0 +1,31 @@
+import time
+from lsm6dsox import LSM6DSOX
+from machine import Pin, I2C
+
+# Initialize the LSM6DSOX sensor
+lsm = LSM6DSOX(I2C(0, scl=Pin(13), sda=Pin(12)))
+
+# Function to calculate the delta value
+def calculate_delta(prev, curr):
+    return [curr[i] - prev[i] for i in range(3)]
+
+# Initialize previous data with the first reading
+prev_data = lsm.accel()
+
+# Run the loop 100 times
+for _ in range(100):
+    # Get current accelerometer data
+    curr_data = lsm.accel()
+    
+    # Calculate delta values
+    delta = calculate_delta(prev_data, curr_data)
+    
+    # Print the formatted data and delta values
+    print('{:>8.3f},{:>8.3f},{:>8.3f},{:>8.3f},{:>8.3f},{:>8.3f}'.format(*curr_data, *delta))
+    
+    # Update previous data
+    prev_data = curr_data
+    
+    # Wait for 100 ms
+    time.sleep_ms(100)
+

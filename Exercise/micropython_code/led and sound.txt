@@ -1,0 +1,52 @@
+import machine
+import utime
+
+# Constants for PDM microphone
+PDM_CLK_PIN = 5  # Adjust pin if necessary
+PDM_DATA_PIN = 4  # Adjust pin if necessary
+
+# Initialize PDM clock and data pins
+pdm_clk = machine.Pin(PDM_CLK_PIN)
+pdm_data = machine.Pin(PDM_DATA_PIN)
+
+# Initialize LED pin
+led_pin = machine.Pin(6, machine.Pin.OUT)
+
+# Placeholder function to read PDM microphone data
+# Note: This function is a placeholder and should be replaced with actual PDM reading logic
+def read_pdm_microphone():
+    # Simulate reading PDM microphone data
+    # In a real implementation, this function should read actual PDM data from the microphone
+    # Example: return [some_amplitude_value] * number_of_samples
+    import random
+    return [random.randint(32000, 33000) for _ in range(128)]  # Simulated random values
+
+def process_samples(samples):
+    # Calculate the sound level as the sum of absolute deviations from the midpoint
+    midpoint = 32768
+    sound_level = sum(abs(sample - midpoint) for sample in samples) / len(samples)
+    return sound_level
+
+threshold = 300  # Threshold for detecting speech
+
+while True:
+    # Read PDM microphone data
+    samples = read_pdm_microphone()
+
+    # Process the samples to calculate the sound level
+    sound_level = process_samples(samples)
+
+    # Print the sound level to the console
+    print("Sound level:", sound_level)
+
+    # Detect if the sound level exceeds the threshold and control LED
+    if sound_level > threshold:
+        led_pin.on()  # Turn on the LED
+        print("Speaking detected, LED ON")
+    else:
+        led_pin.off()  # Turn off the LED
+        print("No speech detected, LED OFF")
+
+    # Delay to print sound level every 0.1 seconds
+    utime.sleep(0.1)
+

@@ -1,0 +1,69 @@
+import time
+from lsm6dsox import LSM6DSOX
+from machine import Pin, I2C
+import time
+from machine import Pin
+
+# RGB LED connected to the RP2040
+ledG = Pin(25, Pin.OUT)
+ledR = Pin(15, Pin.OUT)
+ledB = Pin(16, Pin.OUT)
+ledR.on()
+ledB.on()
+ledG.on()
+
+# Initialize the LSM6DSOX sensor
+lsm = LSM6DSOX(I2C(0, scl=Pin(13), sda=Pin(12)))
+
+# Function to calculate the delta value
+def calculate_delta(prev, curr):
+    return [curr[i] - prev[i] for i in range(3)]
+
+# Function to classify the device state
+def classify_state(accel_data, delta):
+    threshold_still = 0.1  # Threshold to consider the device as still
+    threshold_hand = 0.1   # Threshold to consider the device in hand
+    threshold_tilt_z = 0.5  # Z-axis threshold to detect tilt
+
+    delta_magnitude = sum(abs(d) for d in delta)
+    z_accel = accel_data[2]  # Z-axis acceleration
+
+    if delta_magnitude < threshold_still and abs(z_accel) > 0.9:
+        ledR.on()
+        ledB.on()
+        ledG.on()
+        return "On Table"
+    elif delta_magnitude < threshold_hand and abs(z_accel) < 0.9 and abs(z_accel) > threshold_tilt_z:
+        ledR.off()
+        ledB.on()
+        ledG.on()
+        return "In Hand (Tilted)"
+    else:
+        ledB.on()
+        ledB.off()
+        ledG.on()
+        return "Rotating"
+
+# Initialize previous data with the first reading
+prev_data = lsm.accel()
+
+# Run the loop 100 times
+while True:
+    # Get current accelerometer data
+    curr_data = lsm.accel()
+    
+    # Calculate delta values
+    delta = calculate_delta(prev_data, curr_data)
+    
+    # Classify the state of the device
+    state = classify_state(curr_data, delta)
+    print(state)
+    # Print the formatted data, delta values, and state
+    #print('{:>8.3f},{:>8.3f},{:>8.3f},{:>8.3f},{:>8.3f},{:>8.3f},{}'.format(*curr_data, *delta, state))
+    
+    # Update previous data
+    prev_data = curr_data
+    
+    # Wait for 100 ms
+    time.sleep_ms(100)
+

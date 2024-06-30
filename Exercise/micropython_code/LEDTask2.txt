@@ -1,0 +1,25 @@
+# RGB example
+
+import time
+from machine import Pin
+
+# RGB LED connected to the RP2040
+ledG = Pin(25, Pin.OUT)
+ledR = Pin(15, Pin.OUT)
+ledB = Pin(16, Pin.OUT)
+print("start")
+
+while (True):
+    print("*")
+    ledG.on()
+    ledR.off()
+    ledB.off()
+    time.sleep_ms(250)
+    ledG.off()
+    ledR.on()
+    ledB.off()
+    time.sleep_ms(250)
+    ledG.off()
+    ledR.off()
+    ledB.on()
+    time.sleep_ms(250)
